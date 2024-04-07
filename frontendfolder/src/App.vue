@@ -1,24 +1,18 @@
 <template>
-  <navbar-comp>
-    <router-view></router-view>
-  </navbar-comp>
+  <nav>
+    <router-link to="/">Home</router-link> |
+    <router-link to="/about">About</router-link> |
+    <router-link to="/contact">Contact</router-link> |
+    <router-link to="/login">Login</router-link> |
+    <router-link to="/signup">Sign Up</router-link> |
+    <router-link to="/dashboard">Dashboard</router-link>
+  </nav>
+  
 </template>
-
-<script>
-import NavbarComp from './components/NavbarComp.vue';
-
-export default {
-  components: {
-    NavbarComp,
-  },
-};
-</script>
 
 <style>
 #app {
-  font-family: "Alumni Sans Collegiate One", sans-serif;
-  font-weight: 400;
-  font-style: normal;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -32,5 +26,9 @@ nav {
 nav a {
   font-weight: bold;
   color: #2c3e50;
+}
+
+nav a.router-link-exact-active {
+  color: #42b983;
 }
 </style>
