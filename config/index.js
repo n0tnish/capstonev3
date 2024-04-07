@@ -1,5 +1,7 @@
 import { createPool } from "mysql";
 import { config } from "dotenv";
+import axios from 'axios';
+import { Products } from '../config/index.js';
 config()
 let connection=createPool({
 
