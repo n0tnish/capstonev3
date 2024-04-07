@@ -1,119 +1,162 @@
 <template>
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6 offset-md-3">
-          <div class="card">
-            <div class="card-header">
-              <h3 class="text-center">Sign Up</h3>
-            </div>
-            <div class="card-body">
-              <form @submit.prevent="onSubmit">
-                <div class="form-group">
-                  <label for="name">Name:</label>
-                  <input type="text" class="form-control" id="name" v-model="name">
-                </div>
-                <div class="form-group">
-                  <label for="email">Email:</label>
-                  <input type="email" class="form-control" id="email" v-model="email">
-                </div>
-                <div class="form-group">
-                  <label for="password">Password:</label>
-                  <input type="password" class="form-control" id="password" v-model="password">
-                </div>
-                <div class="form-group">
-                  <label for="confirmPassword">Confirm Password:</label>
-                  <input type="password" class="form-control" id="confirmPassword" v-model="confirmPassword">
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
-              </form>
-            </div>
+    <div class="content">
+      <div class="signup-container">
+        <h2 class="signup-title">Create Account</h2>
+        <form @submit.prevent="register" class="signup-form">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="First Name" v-model="payload.firstName">
           </div>
-        </div>
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Last Name" v-model="payload.lastName">
+          </div>
+          <div class="form-group">
+            <input type="email" class="form-control" placeholder="Email" v-model="payload.emailAdd">
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" placeholder="Password" v-model="payload.userPass">
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+          </div>
+          <div class="regist-link">Already have an account?
+            <router-link to="/login">Login</router-link>
+          </div>
+        </form>
       </div>
     </div>
   </template>
   
   <script>
-  import axios from "axios";
+  import sweet from 'sweetalert'
   
   export default {
+    name: 'Signup',
     data() {
       return {
-        name: "",
-        email: "",
-        password: "",
-        confirmPassword: ""
+        payload: {
+          firstName: '',
+          lastName: '',
+          emailAdd: '',
+          userPass: ''
+        }
       };
     },
     methods: {
-      async onSubmit() {
+      async register() {
         try {
-          const response = await axios.post("/api/users", {
-            name: this.name,
-            email: this.email,
-            password: this.password
+          await this.$store.dispatch('register', this.payload);
+          sweet({
+            title: 'Successful',
+            text: 'Success ! Your account has been created!',
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false
           });
-  
-          if (response.data.success) {
-            // sign-up successful, display success message
-            this.successMessage = response.data.message;
-          } else {
-            // sign-up unsuccessful, display error message
-            this.errorMessage = response.data.message;
-          }
+          setTimeout(() => {
+            window.location.reload();
+          }, 3000);
         } catch (error) {
-          // display error message
-          this.errorMessage = error.message;
+          console.error(error);
+          sweet({
+            title: 'Error',
+            text: 'Failed. Unable to create account. Please try again at a later stage.',
+            icon: 'error',
+            timer: 2000
+          });
+          setTimeout(() => {
+            window.location.reload();
+          }, 3000);
         }
       }
     }
   };
   </script>
   
-  <style>
-  .container {
-    max-width: 600px;
-    margin: 0 auto;
+  <style scoped>
+  .content {
+    background-image: url('https://i.postimg.cc/yYy6dSBN/contactbg.jpg');
+    background-size: cover;
+    background-position: center;
+    width: 100vw; 
+    height: 100vh; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   
-  .card {
-    border: 0;
+  .signup-container {
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: 500px;
+    margin-bottom: 130px;
   }
   
-  .card-header {
-    background-color: #343a40;
-    color: #fff;
-    padding: 15px;
+  .signup-title {
+    font-size: 28px;
+    margin-bottom: 20px;
     text-align: center;
+    color: #000000;
   }
   
-  .form-group {
+  .signup-form .form-group {
     margin-bottom: 15px;
   }
   
-  .form-control {
-    border-radius: 0;
-  }
-  
-  .btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
-  }
-  
-  .btn-primary:hover {
-    background-color: #0069d9;
-    border-color: #0062cc;
-  }
-  
-  .btn-primary:focus {
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
-  }
-  
-  .btn-block {
+  .signup-form .form-control {
     width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.3s ease;
   }
   
-  .alert {
-    margin-top: 15px;
+  .signup-form .form-control:focus {
+    border-color: #6c757d;
+  }
+  
+  .signup-form .btn-primary {
+    background-color: #d45693;
+    border-color: #ffffff;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+  
+  .signup-form .btn-primary:hover {
+    background-color: #d45693;
+    border-color: #f1f1f1;
+    box-shadow: 0 0 10px rgb(107, 45, 45);
+  }
+  
+  .regist-link {
+    color: #000000;
+  }
+  
+  @media only screen and (max-width: 768px) {
+    .signup-container {
+      width: 90%; 
+    }
+  }
+  
+  @media only screen and (max-width: 576px) {
+    .signup-container {
+      width: 80%; 
+    }
+  
+    .signup-title {
+      font-size: 24px; 
+    }
+  
+    .signup-form .form-control {
+      font-size: 14px; 
+    }
+  }
+  
+  @media only screen and (max-width: 400px) {
+    .signup-container {
+      width: 95%; 
+    }
   }
   </style>
+  
